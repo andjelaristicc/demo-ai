@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import ChatWidget from "@/components/ChatWidget";
 import VoiceWidget from "@/components/VoiceWidget";
 import { DEFAULT_CONFIG } from "@/constants";
@@ -8,7 +8,7 @@ import { MonitorIcon, SmartphoneIcon } from "@/components/Icons";
 import { useSearchParams } from "next/navigation";
 import { ChatConfig } from "@/types";
 
-const DemoPage: React.FC = () => {
+const DemoPageContent: React.FC = () => {
   const searchParams = useSearchParams();
   const siteUrlParam = searchParams.get("site");
 
@@ -23,7 +23,6 @@ const DemoPage: React.FC = () => {
   const [urlInput, setUrlInput] = useState(initialUrl);
   const [isGenerating, setIsGenerating] = useState(false);
 
-  // Generate custom prompt when URL changes
   const generatePromptForSite = async (url: string) => {
     setIsGenerating(true);
     setConfig(prev => ({ ...prev, previewUrl: url }));
@@ -162,7 +161,7 @@ const DemoPage: React.FC = () => {
           {/* Chat Widget */}
           <ChatWidget config={config} />
 
-          {/* Voice Widget - Now handles its own open/close */}
+          {/* Voice Widget */}
           <VoiceWidget config={config} />
         </div>
       </main>
@@ -181,4 +180,17 @@ const DemoPage: React.FC = () => {
   );
 };
 
-export default DemoPage;
+export default function DemoPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex items-center justify-center h-screen bg-slate-950 text-white">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-8 h-8 border-2 border-pink-500 border-t-transparent rounded-full animate-spin"></div>
+          <p className="text-slate-400 text-sm">Loading...</p>
+        </div>
+      </div>
+    }>
+      <DemoPageContent />
+    </Suspense>
+  );
+}
