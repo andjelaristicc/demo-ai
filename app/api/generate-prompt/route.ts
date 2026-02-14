@@ -7,8 +7,6 @@ export async function POST(req: NextRequest) {
   // ✅ Initialize INSIDE the function instead:
   const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! });
 
-
-export async function POST(req: NextRequest) {
   try {
     const { websiteUrl } = await req.json();
 

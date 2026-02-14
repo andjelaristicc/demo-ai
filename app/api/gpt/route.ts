@@ -6,7 +6,6 @@ export async function POST(req: NextRequest) {
   // ✅ ADD inside:
   const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! });
 
-export async function POST(req: NextRequest) {
   try {
     const { message, conversationHistory, systemPrompt } = await req.json();
 
